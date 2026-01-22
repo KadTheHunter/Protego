@@ -1,0 +1,6 @@
+name: Protego
+version: '1.0'
+main: org.kaddicus.protego.Protego
+api-version: '1.21'
+author: Kaddicus
+description: Protects Item Frames, Paintings, and other Hanging Entities from being destroyed by Projectiles
