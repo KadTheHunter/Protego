@@ -3,4 +3,15 @@ version: '1.1'
 main: org.kaddicus.protego.Protego
 api-version: '1.21'
 author: Kaddicus
-description: Protects Item Frames, Paintings, and other Hanging Entities from being destroyed by Projectiles
+description: Protects Item Frames, Paintings, and other Hanging Entities from being destroyed by Projectiles, and provides a way to remove Armor Stands with negative Health / DeathTime values.
+
+commands:
+  evanesco:
+    description: Removes all Armor Stands with negative Health / DeathTime values
+    usage: /evanesco
+    permission: protego.evanesco
+
+permissions:
+  protego.evanesco:
+    description: Allows use of /evanesco
+    default: op
