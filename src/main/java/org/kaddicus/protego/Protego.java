@@ -23,6 +23,7 @@ public final class Protego extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VehicleCreateListener(entityManager), this);
         getServer().getPluginManager().registerEvents(new BeehiveListener(), this);
         getServer().getPluginManager().registerEvents(new HangingEntityListener(), this);
+        getServer().getPluginManager().registerEvents(new SpawnerListener(), this);
 
         if (getCommand("evanesco") != null) {
             Objects.requireNonNull(getCommand("evanesco")).setExecutor(new EvanescoCommand(this));
