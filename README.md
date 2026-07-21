@@ -14,11 +14,7 @@
 - **Block Entity Types**: Completely prevent specific entity types from spawning (e.g., Wither, Ender Dragon, Primed TNT)
 - **Strip Functionality**: Allow entities to spawn but neuter dangerous functionality (command block minecarts execute nothing, spawner minecarts never spawn)
 - **Global Chunk Limits**: Set a maximum number of entities per chunk to prevent lag (with configurable exclusions e.g., Display entities)
-
-### NBT Sanitization
-- **Tag Blacklist**: Strip dangerous NBT tags from all spawned entities (Motion, Invulnerable, Passengers, etc.)
-- **Passenger Control**: Blacklist or whitelist specific passenger entity types, or nuke all passengers entirely
-- **Recursive Sanitization**: Automatically sanitizes nested passenger entities to infinite depth
+- **Passenger Control**: Blacklist or whitelist specific passenger entity types, and recursively sanitize nested passengers
 
 ### Cleanup Commands
 - **`/evanesco`**: Detects and removes Armor Stands with negative Health/DeathTime values that bypass vanilla cleanup
@@ -49,12 +45,6 @@ blocked-entity-types:
 strip-functionality-types:
   - MINECART_COMMAND
   - MINECART_MOB_SPAWNER
-
-# NBT tag blacklist - these tags will be stripped from ALL spawned entities
-# If this list is not empty, it takes priority over the whitelist
-# Common dangerous tags: Passengers, custom_name, Invulnerable, etc.
-nbt-blacklist:
-  - Motion
 
 # Passenger Type blacklist - these Passengers will be stripped from ALL spawned entities
 # If this list is not empty, it takes priority over the whitelist
@@ -96,8 +86,6 @@ chunk-limit-exclusions:
 
 ## Technical Details
 - **Single Plugin**: No additional plugins or external libraries required
-- **NMS Integration**: Uses direct NMS access for entity manipulation and sanitization
-- **Version-Specific**: Tied to specific Minecraft versions due to NMS usage (requires rebuild per MC version)
 - **Performance**: Uses efficient chunk-based entity scanning and event-driven sanitization
 - **Compatibility**: Works with Paper, Purpur, and other Bukkit-compatible server software
 - **API Version**: 1.21+

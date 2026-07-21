@@ -1,23 +1,17 @@
 # Entity types that are completely blocked from spawning
 # Use Bukkit EntityType names (uppercase)
 blocked-entity-types:
-  - ENDER_DRAGON
-  - WITHER
-  - FALLING_BLOCK
-  - TNT
+  - "ENDER_DRAGON"
+  - "WITHER"
+  - "FALLING_BLOCK"
+  - "TNT"
 
 # Entity types that can be spawned but will be stripped specially
 # Use Bukkit EntityType names (uppercase)
 # ENTITIES OTHER THAN THOSE LISTED ARE NOT CURRENTLY SUPPORTED!
 strip-functionality-types:
-  - MINECART_COMMAND
-  - MINECART_MOB_SPAWNER
-
-# NBT tag blacklist - these tags will be stripped from ALL spawned entities
-# If this list is not empty, it takes priority over the whitelist
-# Common dangerous tags: Passengers, custom_name, Invulnerable, etc.
-nbt-blacklist:
-  - Motion
+  - "MINECART_COMMAND"
+  - "MINECART_MOB_SPAWNER"
 
 # Passenger Type blacklist - these Passengers will be stripped from ALL spawned entities
 # If this list is not empty, it takes priority over the whitelist
@@ -26,11 +20,11 @@ passenger-blacklist: []
 # Passenger Type whitelist - ONLY these Passengers will be kept (all others stripped)
 # Only used if passenger-blacklist is empty
 passenger-whitelist:
-  - TEXT_DISPLAY
-  - BLOCK_DISPLAY
-  - ITEM_DISPLAY
-  - MARKER
-  - INTERACTION
+  - "TEXT_DISPLAY"
+  - "BLOCK_DISPLAY"
+  - "ITEM_DISPLAY"
+  - "MARKER"
+  - "INTERACTION"
 
 # Global maximum number of entities allowed per chunk (-1 for unlimited)
 global-entity-per-chunk-limit: 100
@@ -38,8 +32,8 @@ global-entity-per-chunk-limit: 100
 # Entity types that don't count toward the per-chunk limit
 # Use Bukkit EntityType names (uppercase)
 chunk-limit-exclusions:
-  - TEXT_DISPLAY
-  - BLOCK_DISPLAY
-  - ITEM_DISPLAY
-  - MARKER
-  - INTERACTION
+  - "TEXT_DISPLAY"
+  - "BLOCK_DISPLAY"
+  - "ITEM_DISPLAY"
+  - "MARKER"
+  - "INTERACTION"

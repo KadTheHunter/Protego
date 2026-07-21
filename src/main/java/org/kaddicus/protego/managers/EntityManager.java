@@ -38,56 +38,27 @@ public class EntityManager {
         }
     }
 
-    public void sanitizeEntity(Entity bukkitEntity, net.minecraft.world.entity.Entity nmsEntity) {
-        for (String key : config.getNbtBlacklist()) {
-            switch (key.toLowerCase()) {
-                // Tags used by all Entities, excluding Data, ID, Pos, and UUID
-                case "air": nmsEntity.setAirSupply(300); break;
-                case "customname": nmsEntity.setCustomName(null); break;
-                case "customnamevisible": nmsEntity.setCustomNameVisible(false); break;
-                case "fall_distance": nmsEntity.resetFallDistance(); break;
-                case "fire": nmsEntity.setRemainingFireTicks(0); break;
-                case "glowing": nmsEntity.setGlowingTag(false); break;
-                case "hasvisualfire": nmsEntity.setSharedFlagOnFire(false); break;
-                case "invulnerable": nmsEntity.setInvulnerable(false); break;
-                case "motion": nmsEntity.setDeltaMovement(0, 0, 0); break;
-                case "nogravity": nmsEntity.setNoGravity(false); break;
-                case "onground": nmsEntity.setOnGround(false); break;
-                case "portalcooldown": nmsEntity.setPortalCooldown(0); break;
-                case "rotation": nmsEntity.setRot(0, 0); break;
-                case "silent": nmsEntity.setSilent(false); break;
-                case "tags": nmsEntity.getTags().clear(); break;
-                case "ticksfrozen": nmsEntity.setTicksFrozen(0); break;
-            }
-        }
-    }
-
-    public void sanitizePassengers(net.minecraft.world.entity.Entity entity) {
-        boolean nukeAllPassengers = config.getNbtBlacklist().stream()
-                .anyMatch(s -> s.equalsIgnoreCase("Passengers"));
-
+    /**
+     * Recursively checks all passengers on an entity and destroys any that
+     * are blocked or not on the whitelist.
+     */
+    public void checkPassengers(net.minecraft.world.entity.Entity entity) {
         List<net.minecraft.world.entity.Entity> passengers = new ArrayList<>(entity.getPassengers());
 
         for (net.minecraft.world.entity.Entity passenger : passengers) {
-            Entity bukkitPassenger = passenger.getBukkitEntity();
-            EntityType passengerType = bukkitPassenger.getType();
-            boolean shouldDestroy = shouldDestroyPassenger(nukeAllPassengers, passengerType);
-
-            if (shouldDestroy) {
+            EntityType passengerType = passenger.getBukkitEntity().getType();
+            if (shouldDestroyPassenger(passengerType)) {
                 passenger.stopRiding();
                 passenger.discard();
                 logger.info("Destroyed passenger " + passengerType +
                         " riding " + entity.getBukkitEntity().getType());
                 continue;
             }
-
-            sanitizeEntity(bukkitPassenger, passenger);
-            sanitizePassengers(passenger);
+            checkPassengers(passenger);
         }
     }
 
-    private boolean shouldDestroyPassenger(boolean nukeAll, EntityType type) {
-        if (nukeAll) return true;
+    private boolean shouldDestroyPassenger(EntityType type) {
         if (config.getBlockedEntityTypes().contains(type)) return true;
         if (config.getPassengerBlacklist().contains(type)) return true;
         return !config.getPassengerWhitelist().isEmpty() &&

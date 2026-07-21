@@ -2,7 +2,6 @@ package org.kaddicus.protego.listeners;
 
 import org.kaddicus.protego.managers.EntityManager;
 
-import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,8 +33,6 @@ public class EntitySpawnListener implements Listener {
             entityManager.stripEntityFunctionality(entity);
         }
 
-        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-        entityManager.sanitizeEntity(entity, nmsEntity);
-        entityManager.sanitizePassengers(nmsEntity);
+        entityManager.checkPassengers(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandle());
     }
 }

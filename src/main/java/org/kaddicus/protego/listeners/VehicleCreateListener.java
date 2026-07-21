@@ -34,8 +34,6 @@ public class VehicleCreateListener implements Listener {
             entityManager.stripEntityFunctionality(entity);
         }
 
-        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-        entityManager.sanitizeEntity(entity, nmsEntity);
-        entityManager.sanitizePassengers(nmsEntity);
+        entityManager.checkPassengers(((CraftEntity) entity).getHandle());
     }
 }
