@@ -68,10 +68,12 @@ public class EntityManager {
     public boolean isChunkLimitExceeded(Entity entity) {
         int limit = config.getGlobalChunkLimit();
         if (limit <= 0) return false;
+        if (entity.getType() == EntityType.PLAYER) return false;
         if (config.getChunkLimitExclusions().contains(entity.getType())) return false;
 
         Chunk chunk = entity.getLocation().getChunk();
         long count = Arrays.stream(chunk.getEntities())
+                .filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> !config.getChunkLimitExclusions().contains(e.getType()))
                 .count();
 
