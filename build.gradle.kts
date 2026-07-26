@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.kaddicus"
-version = "1.3.1"
+version = "1.3.2"
 description = "Protects Item Frames, Paintings, and other Hanging Entities from being destroyed by Projectiles, and provides a way to remove Armor Stands with negative Health / DeathTime values."
 
 repositories {
