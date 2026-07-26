@@ -58,6 +58,33 @@ public class EntityManager {
         }
     }
 
+    public void sanitizeCustomName(Entity bukkitEntity, net.minecraft.world.entity.Entity nmsEntity) {
+        net.minecraft.network.chat.Component name = nmsEntity.getCustomName();
+        if (containsMaliciousComponent(name)) {
+            nmsEntity.setCustomName(null);
+            logger.warning("Stripped malicious CustomName (nested Translatable/Selector) from " +
+                    bukkitEntity.getType() + " at " + bukkitEntity.getLocation());
+        }
+    }
+
+    private boolean containsMaliciousComponent(net.minecraft.network.chat.Component component) {
+        if (component == null) return false;
+
+        net.minecraft.network.chat.ComponentContents contents = component.getContents();
+        if (contents instanceof net.minecraft.network.chat.contents.TranslatableContents ||
+                contents instanceof net.minecraft.network.chat.contents.SelectorContents) {
+            return true;
+        }
+
+        for (net.minecraft.network.chat.Component sibling : component.getSiblings()) {
+            if (containsMaliciousComponent(sibling)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private boolean shouldDestroyPassenger(EntityType type) {
         if (config.getBlockedEntityTypes().contains(type)) return true;
         if (config.getPassengerBlacklist().contains(type)) return true;

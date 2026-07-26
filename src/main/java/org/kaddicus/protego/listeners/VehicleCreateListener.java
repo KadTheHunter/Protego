@@ -35,5 +35,7 @@ public class VehicleCreateListener implements Listener {
         }
 
         entityManager.checkPassengers(((CraftEntity) entity).getHandle());
+
+        entityManager.sanitizeCustomName(entity, ((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandle());
     }
 }

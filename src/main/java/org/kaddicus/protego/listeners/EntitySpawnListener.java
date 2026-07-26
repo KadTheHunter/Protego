@@ -34,5 +34,7 @@ public class EntitySpawnListener implements Listener {
         }
 
         entityManager.checkPassengers(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandle());
+
+        entityManager.sanitizeCustomName(entity, ((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandle());
     }
 }
