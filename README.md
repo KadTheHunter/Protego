@@ -58,6 +58,7 @@ passenger-whitelist:
   - ITEM_DISPLAY
   - MARKER
   - INTERACTION
+  - ARMOR_STAND
 
 # Global maximum number of entities allowed per chunk (-1 for unlimited)
 global-entity-per-chunk-limit: 100
