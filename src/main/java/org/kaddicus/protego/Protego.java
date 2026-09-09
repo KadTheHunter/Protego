@@ -7,6 +7,7 @@ import org.kaddicus.protego.managers.ConfigManager;
 import org.kaddicus.protego.managers.EntityManager;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kaddicus.protego.managers.ItemManager;
 
 import java.util.Objects;
 
@@ -19,11 +20,14 @@ public final class Protego extends JavaPlugin {
 
         EntityManager entityManager = new EntityManager(configManager, getLogger());
 
+        ItemManager itemManager = new ItemManager(getLogger());
+
         getServer().getPluginManager().registerEvents(new EntitySpawnListener(entityManager), this);
         getServer().getPluginManager().registerEvents(new VehicleCreateListener(entityManager), this);
         getServer().getPluginManager().registerEvents(new BeehiveListener(), this);
         getServer().getPluginManager().registerEvents(new HangingEntityListener(), this);
         getServer().getPluginManager().registerEvents(new SpawnerListener(), this);
+        getServer().getPluginManager().registerEvents(new MaliciousItemListener(itemManager), this);
 
         if (getCommand("evanesco") != null) {
             Objects.requireNonNull(getCommand("evanesco")).setExecutor(new EvanescoCommand(this));
