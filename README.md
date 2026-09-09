@@ -15,6 +15,7 @@
 - **Strip Functionality**: Allow entities to spawn but neuter dangerous functionality (command block minecarts execute nothing, spawner minecarts never spawn)
 - **Global Chunk Limits**: Set a maximum number of entities per chunk to prevent lag (with configurable exclusions e.g., Display entities)
 - **Passenger Control**: Blacklist or whitelist specific passenger entity types, and recursively sanitize nested passengers
+- **Exploit Prevention**: Completely prevents Decimator and Selector Overload attacks from occurring
 
 ### Cleanup Commands
 - **`/evanesco`**: Detects and removes Armor Stands with negative Health/DeathTime values that bypass vanilla cleanup
