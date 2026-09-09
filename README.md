@@ -105,4 +105,5 @@ This plugin is open source. Do whatever you want with it.
 
 ## Credits
 - **Kaddicus** - Original author and maintainer
+- **[noramibu](https://github.com/noramibu)** - Designer of the protections against Decimator and Selector Overload attacks
 - **Harry Potter** - For the inspiration (Protego = Shield Charm, Evanesco = Vanishing Spell)
