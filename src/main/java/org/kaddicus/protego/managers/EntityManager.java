@@ -1,10 +1,16 @@
 package org.kaddicus.protego.managers;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.entity.*;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class EntityManager {
     private final ConfigManager config;
@@ -24,9 +30,22 @@ public class EntityManager {
     }
 
     public void stripEntityFunctionality(Entity entity) {
+        Location loc = entity.getLocation();
+
         if (entity instanceof org.bukkit.entity.minecart.CommandMinecart command) {
             command.setCommand("");
-            logger.info("Stripped Command Minecart at " + entity.getLocation());
+
+            logger.info("Sterilized Command Block Minecart at " + loc);
+
+            Component msg = Component.text()
+                    .append(Component.text("[Protego] ", NamedTextColor.GOLD))
+                    .append(Component.text("Sterilized Command Block Minecart at ", NamedTextColor.YELLOW))
+                    .append(Component.text(loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ(), NamedTextColor.RED)
+                            .clickEvent(ClickEvent.runCommand("/tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ())))
+                    .build();
+
+            notifyAdmins(msg);
+
         }
 
         if (entity instanceof org.bukkit.entity.minecart.SpawnerMinecart spawner) {
@@ -34,7 +53,50 @@ public class EntityManager {
             spawner.setSpawnedEntity((EntitySnapshot) null);
             spawner.setPotentialSpawns(Collections.emptyList());
             spawner.setSpawnCount(0);
-            logger.info("Stripped Spawner Minecart at " + entity.getLocation());
+
+            logger.info("Sterilized Spawner Minecart at " + loc);
+
+            Component msg = Component.text()
+                    .append(Component.text("[Protego] ", NamedTextColor.GOLD))
+                    .append(Component.text("Sterilized Spawner Minecart at ", NamedTextColor.YELLOW))
+                    .append(Component.text(loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ(), NamedTextColor.RED)
+                            .clickEvent(ClickEvent.runCommand("/tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ())))
+                    .build();
+
+            notifyAdmins(msg);
+        }
+    }
+
+    public void checkPassengers(net.minecraft.world.entity.Entity entity) {
+        List<EntityType> destroyedTypes = new ArrayList<>();
+
+        checkPassengersRecursive(entity, destroyedTypes);
+
+        if (!destroyedTypes.isEmpty()) {
+            Location loc = entity.getBukkitEntity().getLocation();
+
+            String types = destroyedTypes.stream()
+                    .map(EntityType::toString)
+                    .distinct()
+                    .collect(Collectors.joining(", "));
+
+            logger.info("Destroyed " + destroyedTypes.size() +
+                    " passenger(s) (" + types + ") riding " + entity.getBukkitEntity().getType() + " at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+
+            Component msg = Component.text()
+                    .append(Component.text("[Protego] ", NamedTextColor.GOLD))
+                    .append(Component.text("Destroyed ", NamedTextColor.YELLOW))
+                    .append(Component.text(destroyedTypes.size(), NamedTextColor.RED))
+                    .append(Component.text(" passenger(s) (", NamedTextColor.YELLOW))
+                    .append(Component.text(types, NamedTextColor.RED))
+                    .append(Component.text(") riding ", NamedTextColor.YELLOW))
+                    .append(Component.text(entity.getBukkitEntity().getType().toString(), NamedTextColor.RED))
+                    .append(Component.text(" at ", NamedTextColor.YELLOW))
+                    .append(Component.text(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ(), NamedTextColor.RED)
+                            .clickEvent(ClickEvent.runCommand("/tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ())))
+                    .build();
+
+            notifyAdmins(msg);
         }
     }
 
@@ -42,19 +104,17 @@ public class EntityManager {
      * Recursively checks all passengers on an entity and destroys any that
      * are blocked or not on the whitelist.
      */
-    public void checkPassengers(net.minecraft.world.entity.Entity entity) {
+    private void checkPassengersRecursive(net.minecraft.world.entity.Entity entity, List<EntityType> destroyed) {
         List<net.minecraft.world.entity.Entity> passengers = new ArrayList<>(entity.getPassengers());
-
         for (net.minecraft.world.entity.Entity passenger : passengers) {
             EntityType passengerType = passenger.getBukkitEntity().getType();
             if (shouldDestroyPassenger(passengerType)) {
                 passenger.stopRiding();
                 passenger.discard();
-                logger.info("Destroyed passenger " + passengerType +
-                        " riding " + entity.getBukkitEntity().getType());
+                destroyed.add(passengerType);
                 continue;
             }
-            checkPassengers(passenger);
+            checkPassengersRecursive(passenger, destroyed);
         }
     }
 
@@ -62,8 +122,22 @@ public class EntityManager {
         net.minecraft.network.chat.Component name = nmsEntity.getCustomName();
         if (containsMaliciousComponent(name)) {
             nmsEntity.setCustomName(null);
+
+            Location loc = bukkitEntity.getLocation();
+
             logger.warning("Stripped malicious CustomName (nested Translatable/Selector) from " +
-                    bukkitEntity.getType() + " at " + bukkitEntity.getLocation());
+                    bukkitEntity.getType() + " at " + loc);
+
+            Component msg = Component.text()
+                    .append(Component.text("[Protego] ", NamedTextColor.GOLD))
+                    .append(Component.text("Stripped malicious CustomName from ", NamedTextColor.YELLOW))
+                    .append(Component.text(bukkitEntity.getType().toString(), NamedTextColor.RED))
+                    .append(Component.text(" at ", NamedTextColor.YELLOW))
+                    .append(Component.text(loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ(), NamedTextColor.RED)
+                            .clickEvent(ClickEvent.runCommand("/tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ())))
+                    .build();
+
+            notifyAdmins(msg);
         }
     }
 
@@ -98,17 +172,40 @@ public class EntityManager {
         if (entity.getType() == EntityType.PLAYER) return false;
         if (config.getChunkLimitExclusions().contains(entity.getType())) return false;
 
-        Chunk chunk = entity.getLocation().getChunk();
+        Location loc = entity.getLocation();
+        Chunk chunk = loc.getChunk();
         long count = Arrays.stream(chunk.getEntities())
                 .filter(e -> e.getType() != EntityType.PLAYER)
                 .filter(e -> !config.getChunkLimitExclusions().contains(e.getType()))
                 .count();
 
         if (count >= limit) {
-            logger.info("Blocked " + entity.getType() + " spawn at " + entity.getLocation() +
+            logger.info("Blocked " + entity.getType() + " spawn at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() +
                     " (chunk limit reached: " + count + "/" + limit + ")");
+
+            Component msg = Component.text()
+                    .append(Component.text("[Protego] ", NamedTextColor.GOLD))
+                    .append(Component.text("Chunk limit reached at ", NamedTextColor.YELLOW))
+                    .append(Component.text(loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ(), NamedTextColor.RED)
+                            .clickEvent(ClickEvent.runCommand("/tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ())))
+                    .append(Component.text(" (" + count + "/" + limit + ")", NamedTextColor.GRAY))
+                    .build();
+
+            notifyAdmins(msg);
+
             return true;
         }
         return false;
+    }
+
+    /**
+     * Broadcasts a rich message to all online players with the 'protego.notify' permission.
+     */
+    public void notifyAdmins (Component msg) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.hasPermission("protego.notify")) {
+                p.sendMessage(msg);
+            }
+        }
     }
 }
