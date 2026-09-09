@@ -1,6 +1,10 @@
 package org.kaddicus.protego.listeners;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Beehive;
 import org.bukkit.block.Block;
@@ -43,13 +47,18 @@ public class BeehiveListener implements Listener {
             hive.update(true, false);
             player.sendMessage("§cHive sanitized: cleared all bees.");
 
+            Location loc = hive.getLocation();
+
+            Component msg = Component.text()
+                    .append(Component.text("[Protego] ", NamedTextColor.GOLD))
+                    .append(Component.text(player.getName() + " triggered hive sanitization at ", NamedTextColor.YELLOW))
+                    .append(Component.text(loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ(), NamedTextColor.RED)
+                            .clickEvent(ClickEvent.runCommand("/tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ())))
+                    .build();
+
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (onlinePlayer.hasPermission("protego.notify") && !onlinePlayer.equals(player)) {
-                    onlinePlayer.sendMessage("§6[Protego] §e" + player.getName() +
-                            " triggered hive sanitization at " +
-                            hive.getLocation().getBlockX() + "," +
-                            hive.getLocation().getBlockY() + "," +
-                            hive.getLocation().getBlockZ());
+                    onlinePlayer.sendMessage(msg);
                 }
             }
         }
