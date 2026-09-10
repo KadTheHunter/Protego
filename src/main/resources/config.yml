@@ -38,3 +38,15 @@ chunk-limit-exclusions:
   - "ITEM_DISPLAY"
   - "MARKER"
   - "INTERACTION"
+
+# Decimator / Selector Overload mitigation limits for items
+#####################################################################
+#   DO NOT CHANGE THESE VALUES UNLESS YOU KNOW WHAT YOU ARE DOING!  #
+# CHANGING THESE VALUES CAN OPEN ATTACK VECTORS FOR MALICIOUS DATA! #
+#####################################################################
+# Maximum allowed serialized NBT string length for entity/block data
+item-max-characters: 65536
+# Maximum allowed recursive depth for NBT tags
+item-max-depth: 12
+# Maximum allowed total NBT nodes
+item-max-nodes: 10000

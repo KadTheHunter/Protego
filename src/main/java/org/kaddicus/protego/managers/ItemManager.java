@@ -10,13 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.logging.Logger;
 
 public class ItemManager {
+    private final ConfigManager config;
     private final Logger logger;
 
-    private static final int MAX_CHARACTERS = 65_536;
-    private static final int MAX_DEPTH = 12;
-    private static final int MAX_NODES = 1_024;
-
-    public ItemManager(Logger logger) {
+    public ItemManager(ConfigManager config, Logger logger) {
+        this.config = config;
         this.logger = logger;
     }
 
@@ -34,17 +32,22 @@ public class ItemManager {
                 || isDangerous(block == null ? null : block.copyTagWithoutId());
     }
 
-    private static boolean isDangerous(CompoundTag data) {
-        Tag customName = data == null ? null : data.get("CustomName");
-        return customName != null && exceedsLimits(customName);
+    private boolean isDangerous(CompoundTag data) {
+        if (data == null) return false;
+
+        Tag customName = data.get("CustomName");
+        Tag text = data.get("text");
+
+        return (customName != null && exceedsLimits(customName)) ||
+                (text != null && exceedsLimits(text));
     }
 
-    static boolean exceedsLimits(Tag root) {
-        return exceedsLimits(root, 0, new int[1]) || root.toString().length() > MAX_CHARACTERS;
+    private boolean exceedsLimits(Tag root) {
+        return exceedsLimits(root, 0, new int[1]) || root.toString().length() > config.getItemMaxCharacters();
     }
 
-    private static boolean exceedsLimits(Tag tag, int depth, int[] nodes) {
-        if (depth > MAX_DEPTH || ++nodes[0] > MAX_NODES) {
+    private boolean exceedsLimits(Tag tag, int depth, int[] nodes) {
+        if (depth > config.getItemMaxDepth() || ++nodes[0] > config.getItemMaxNodes()) {
             return true;
         }
         return switch (tag) {

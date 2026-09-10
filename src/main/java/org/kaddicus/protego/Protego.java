@@ -20,7 +20,7 @@ public final class Protego extends JavaPlugin {
 
         EntityManager entityManager = new EntityManager(configManager, getLogger());
 
-        ItemManager itemManager = new ItemManager(getLogger());
+        ItemManager itemManager = new ItemManager(configManager, getLogger());
 
         getServer().getPluginManager().registerEvents(new BeehiveListener(getLogger()), this);
         getServer().getPluginManager().registerEvents(new EntitySpawnListener(entityManager), this);
