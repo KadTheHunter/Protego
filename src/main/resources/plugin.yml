@@ -22,3 +22,6 @@ permissions:
   protego.notify:
     description: Receives notifications when Protego sanitizes bee hives/nests
     default: op
+  protego.spawnegg:
+    description: Allows use of Spawn Eggs
+    default: op
