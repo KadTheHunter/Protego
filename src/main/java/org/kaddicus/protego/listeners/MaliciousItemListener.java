@@ -17,11 +17,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.kaddicus.protego.managers.ItemManager;
 
+import java.util.logging.Logger;
+
 public class MaliciousItemListener implements Listener {
     private final ItemManager itemManager;
+    private final Logger logger;
 
-    public MaliciousItemListener(ItemManager itemManager) {
+    public MaliciousItemListener(ItemManager itemManager, Logger logger) {
         this.itemManager = itemManager;
+        this.logger = logger;
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -54,6 +58,9 @@ public class MaliciousItemListener implements Listener {
             event.setCancelled(true);
 
             Location loc = event.getBlock().getLocation();
+
+            logger.warning("Blocked malicious item from spawning at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+
             Component msg = Component.text()
                     .append(Component.text("[Protego] ", NamedTextColor.GOLD))
                     .append(Component.text("Blocked dangerous item in dispenser at ", NamedTextColor.YELLOW))
@@ -71,6 +78,10 @@ public class MaliciousItemListener implements Listener {
                 .append(Component.text("Blocked an unsafe entity-data item.", NamedTextColor.RED)));
 
         Location loc = player.getLocation();
+
+        logger.warning("Blocked malicious item (" + item.getType() + ") from " +
+                player.getName() + " at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+
 
         Component msg = Component.text()
                 .append(Component.text("[Protego] ", NamedTextColor.GOLD))

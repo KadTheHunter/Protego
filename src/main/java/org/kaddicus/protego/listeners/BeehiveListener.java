@@ -18,7 +18,15 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.logging.Logger;
+
 public class BeehiveListener implements Listener {
+    private final Logger logger;
+
+    public BeehiveListener(Logger logger) {
+        this.logger = logger;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         checkAndSanitizeHive(event.getBlock(), event.getPlayer());
@@ -48,6 +56,8 @@ public class BeehiveListener implements Listener {
             player.sendMessage("§cHive sanitized: cleared all bees.");
 
             Location loc = hive.getLocation();
+
+            logger.warning(player.getName() +" triggered hive sanitization at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
 
             Component msg = Component.text()
                     .append(Component.text("[Protego] ", NamedTextColor.GOLD))
