@@ -35,7 +35,7 @@ public class EntityManager {
         if (entity instanceof org.bukkit.entity.minecart.CommandMinecart command) {
             command.setCommand("");
 
-            logger.info("Sterilized Command Block Minecart at " + loc);
+            logger.warning("Sterilized Command Block Minecart at " + loc);
 
             Component msg = Component.text()
                     .append(Component.text("[Protego] ", NamedTextColor.GOLD))
@@ -54,7 +54,7 @@ public class EntityManager {
             spawner.setPotentialSpawns(Collections.emptyList());
             spawner.setSpawnCount(0);
 
-            logger.info("Sterilized Spawner Minecart at " + loc);
+            logger.warning("Sterilized Spawner Minecart at " + loc);
 
             Component msg = Component.text()
                     .append(Component.text("[Protego] ", NamedTextColor.GOLD))
@@ -80,7 +80,7 @@ public class EntityManager {
                     .distinct()
                     .collect(Collectors.joining(", "));
 
-            logger.info("Destroyed " + destroyedTypes.size() +
+            logger.warning("Destroyed " + destroyedTypes.size() +
                     " passenger(s) (" + types + ") riding " + entity.getBukkitEntity().getType() + " at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
 
             Component msg = Component.text()
@@ -180,7 +180,7 @@ public class EntityManager {
                 .count();
 
         if (count >= limit) {
-            logger.info("Blocked " + entity.getType() + " spawn at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() +
+            logger.warning("Blocked " + entity.getType() + " spawn at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() +
                     " (chunk limit reached: " + count + "/" + limit + ")");
 
             Component msg = Component.text()
