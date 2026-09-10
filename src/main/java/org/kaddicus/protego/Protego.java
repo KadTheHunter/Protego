@@ -1,12 +1,12 @@
 package org.kaddicus.protego;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import org.kaddicus.protego.commands.EvanescoCommand;
 import org.kaddicus.protego.commands.ProtegoCommand;
 import org.kaddicus.protego.listeners.*;
 import org.kaddicus.protego.managers.ConfigManager;
 import org.kaddicus.protego.managers.EntityManager;
-
-import org.bukkit.plugin.java.JavaPlugin;
 import org.kaddicus.protego.managers.ItemManager;
 
 import java.util.Objects;

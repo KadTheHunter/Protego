@@ -6,9 +6,15 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntitySnapshot;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -201,7 +207,7 @@ public class EntityManager {
     /**
      * Broadcasts a rich message to all online players with the 'protego.notify' permission.
      */
-    public void notifyAdmins (Component msg) {
+    public void notifyAdmins(Component msg) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.hasPermission("protego.notify")) {
                 p.sendMessage(msg);

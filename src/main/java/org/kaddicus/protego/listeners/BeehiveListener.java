@@ -57,7 +57,7 @@ public class BeehiveListener implements Listener {
 
             Location loc = hive.getLocation();
 
-            logger.warning(player.getName() +" triggered hive sanitization at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+            logger.warning(player.getName() + " triggered hive sanitization at " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
 
             Component msg = Component.text()
                     .append(Component.text("[Protego] ", NamedTextColor.GOLD))

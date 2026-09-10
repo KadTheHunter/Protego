@@ -4,8 +4,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
-import java.util.*;
 
 public class ConfigManager {
     private final JavaPlugin plugin;
@@ -15,9 +16,8 @@ public class ConfigManager {
     private final Set<EntityType> stripFunctionalityTypes = new HashSet<>();
     private final Set<EntityType> passengerBlacklist = new HashSet<>();
     private final Set<EntityType> passengerWhitelist = new HashSet<>();
-    private int globalChunkLimit = -1;
     private final Set<EntityType> chunkLimitExclusions = new HashSet<>();
-
+    private int globalChunkLimit = -1;
     private int itemMaxCharacters = 65_536;
     private int itemMaxDepth = 12;
     private int itemMaxNodes = 10_000;
@@ -35,30 +35,45 @@ public class ConfigManager {
         FileConfiguration config = plugin.getConfig();
 
         for (String typeName : config.getStringList("blocked-entity-types")) {
-            try { blockedEntityTypes.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type in config: " + typeName); }
+            try {
+                blockedEntityTypes.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type in config: " + typeName);
+            }
         }
 
         for (String typeName : config.getStringList("strip-functionality-types")) {
-            try { stripFunctionalityTypes.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type in config: " + typeName); }
+            try {
+                stripFunctionalityTypes.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type in config: " + typeName);
+            }
         }
 
         for (String typeName : config.getStringList("passenger-blacklist")) {
-            try { passengerBlacklist.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type in config: " + typeName); }
+            try {
+                passengerBlacklist.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type in config: " + typeName);
+            }
         }
 
         for (String typeName : config.getStringList("passenger-whitelist")) {
-            try { passengerWhitelist.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type in config: " + typeName); }
+            try {
+                passengerWhitelist.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type in config: " + typeName);
+            }
         }
 
         globalChunkLimit = config.getInt("global-entity-per-chunk-limit", -1);
 
         for (String typeName : config.getStringList("chunk-limit-exclusions")) {
-            try { chunkLimitExclusions.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type in chunk-limit-exclusions: " + typeName); }
+            try {
+                chunkLimitExclusions.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type in chunk-limit-exclusions: " + typeName);
+            }
         }
 
         itemMaxCharacters = config.getInt("item-max-characters", 65536);
@@ -86,28 +101,43 @@ public class ConfigManager {
         FileConfiguration config = plugin.getConfig();
 
         for (String typeName : config.getStringList("blocked-entity-types")) {
-            try { newBlockedTypes.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type: " + typeName); }
+            try {
+                newBlockedTypes.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type: " + typeName);
+            }
         }
 
         for (String typeName : config.getStringList("strip-functionality-types")) {
-            try { newStripTypes.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type: " + typeName); }
+            try {
+                newStripTypes.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type: " + typeName);
+            }
         }
 
         for (String typeName : config.getStringList("passenger-blacklist")) {
-            try { newPassengerBlacklist.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type: " + typeName); }
+            try {
+                newPassengerBlacklist.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type: " + typeName);
+            }
         }
 
         for (String typeName : config.getStringList("passenger-whitelist")) {
-            try { newPassengerWhitelist.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type: " + typeName); }
+            try {
+                newPassengerWhitelist.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type: " + typeName);
+            }
         }
 
         for (String typeName : config.getStringList("chunk-limit-exclusions")) {
-            try { newChunkExclusions.add(EntityType.valueOf(typeName.toUpperCase())); }
-            catch (IllegalArgumentException e) { logger.warning("Unknown entity type: " + typeName); }
+            try {
+                newChunkExclusions.add(EntityType.valueOf(typeName.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Unknown entity type: " + typeName);
+            }
         }
 
         newGlobalLimit = config.getInt("global-entity-per-chunk-limit", -1);
@@ -116,11 +146,16 @@ public class ConfigManager {
         int newItemMaxDepth = config.getInt("item-max-depth", 12);
         int newItemMaxNodes = config.getInt("item-max-nodes", 10000);
 
-        blockedEntityTypes.clear();     blockedEntityTypes.addAll(newBlockedTypes);
-        stripFunctionalityTypes.clear(); stripFunctionalityTypes.addAll(newStripTypes);
-        passengerBlacklist.clear();     passengerBlacklist.addAll(newPassengerBlacklist);
-        passengerWhitelist.clear();     passengerWhitelist.addAll(newPassengerWhitelist);
-        chunkLimitExclusions.clear();   chunkLimitExclusions.addAll(newChunkExclusions);
+        blockedEntityTypes.clear();
+        blockedEntityTypes.addAll(newBlockedTypes);
+        stripFunctionalityTypes.clear();
+        stripFunctionalityTypes.addAll(newStripTypes);
+        passengerBlacklist.clear();
+        passengerBlacklist.addAll(newPassengerBlacklist);
+        passengerWhitelist.clear();
+        passengerWhitelist.addAll(newPassengerWhitelist);
+        chunkLimitExclusions.clear();
+        chunkLimitExclusions.addAll(newChunkExclusions);
         globalChunkLimit = newGlobalLimit;
 
         itemMaxCharacters = newItemMaxCharacters;
@@ -130,13 +165,39 @@ public class ConfigManager {
         logger.info("Configuration reloaded successfully");
     }
 
-    public Set<EntityType> getBlockedEntityTypes() { return blockedEntityTypes; }
-    public Set<EntityType> getStripFunctionalityTypes() { return stripFunctionalityTypes; }
-    public Set<EntityType> getPassengerBlacklist() { return passengerBlacklist; }
-    public Set<EntityType> getPassengerWhitelist() { return passengerWhitelist; }
-    public int getGlobalChunkLimit() { return globalChunkLimit; }
-    public Set<EntityType> getChunkLimitExclusions() { return chunkLimitExclusions; }
-    public int getItemMaxCharacters() { return itemMaxCharacters; }
-    public int getItemMaxDepth() { return itemMaxDepth; }
-    public int getItemMaxNodes() { return itemMaxNodes; }
+    public Set<EntityType> getBlockedEntityTypes() {
+        return blockedEntityTypes;
+    }
+
+    public Set<EntityType> getStripFunctionalityTypes() {
+        return stripFunctionalityTypes;
+    }
+
+    public Set<EntityType> getPassengerBlacklist() {
+        return passengerBlacklist;
+    }
+
+    public Set<EntityType> getPassengerWhitelist() {
+        return passengerWhitelist;
+    }
+
+    public int getGlobalChunkLimit() {
+        return globalChunkLimit;
+    }
+
+    public Set<EntityType> getChunkLimitExclusions() {
+        return chunkLimitExclusions;
+    }
+
+    public int getItemMaxCharacters() {
+        return itemMaxCharacters;
+    }
+
+    public int getItemMaxDepth() {
+        return itemMaxDepth;
+    }
+
+    public int getItemMaxNodes() {
+        return itemMaxNodes;
+    }
 }
