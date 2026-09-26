@@ -91,14 +91,17 @@ public class ConfigManager {
     public void reloadConfig() {
         plugin.reloadConfig();
 
+        FileConfiguration config = plugin.getConfig();
+
         Set<EntityType> newBlockedTypes = new HashSet<>();
         Set<EntityType> newStripTypes = new HashSet<>();
         Set<EntityType> newPassengerBlacklist = new HashSet<>();
         Set<EntityType> newPassengerWhitelist = new HashSet<>();
         Set<EntityType> newChunkExclusions = new HashSet<>();
         int newGlobalLimit = -1;
-
-        FileConfiguration config = plugin.getConfig();
+        int newItemMaxCharacters = config.getInt("item-max-characters", 65536);
+        int newItemMaxDepth = config.getInt("item-max-depth", 12);
+        int newItemMaxNodes = config.getInt("item-max-nodes", 10000);
 
         for (String typeName : config.getStringList("blocked-entity-types")) {
             try {
@@ -142,9 +145,6 @@ public class ConfigManager {
 
         newGlobalLimit = config.getInt("global-entity-per-chunk-limit", -1);
 
-        int newItemMaxCharacters = config.getInt("item-max-characters", 65536);
-        int newItemMaxDepth = config.getInt("item-max-depth", 12);
-        int newItemMaxNodes = config.getInt("item-max-nodes", 10000);
 
         blockedEntityTypes.clear();
         blockedEntityTypes.addAll(newBlockedTypes);
