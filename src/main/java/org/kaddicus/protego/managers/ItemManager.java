@@ -38,8 +38,13 @@ public class ItemManager {
         Tag customName = data.get("CustomName");
         Tag text = data.get("text");
 
+        Tag front_text = data.get("front_text");
+        Tag back_text = data.get("back_text");
+
         return (customName != null && exceedsLimits(customName)) ||
-                (text != null && exceedsLimits(text));
+                (text != null && exceedsLimits(text) ||
+                (front_text != null && exceedsLimits(front_text)) ||
+                (back_text != null && exceedsLimits(back_text)));
     }
 
     private boolean exceedsLimits(Tag root) {
