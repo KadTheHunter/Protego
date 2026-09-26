@@ -38,6 +38,27 @@ chunk-limit-exclusions:
   - "ITEM_DISPLAY"
   - "MARKER"
   - "INTERACTION"
+  - "ITEM_FRAME"
+  - "GLOW_ITEM_FRAME"
+  - "PAINTING"
+  - "LEASH_KNOT"
+
+# Entities that are NEVER removed by /evanesco (unless forcefully targeted by a flag)
+# Use Bukkit EntityType names (uppercase)
+evanesco-keep-list:
+  - "TEXT_DISPLAY"
+  - "BLOCK_DISPLAY"
+  - "ITEM_DISPLAY"
+  - "MARKER"
+  - "INTERACTION"
+  - "ITEM_FRAME"
+  - "GLOW_ITEM_FRAME"
+  - "PAINTING"
+  - "LEASH_KNOT"
+
+# Maximum chunk radius /evanesco can search to prevent lag spikes
+# 1 = 3x3 chunks, 5 = 11x11 chunks. Do NOT set this above 10.
+evanesco-max-radius: 5
 
 # Decimator / Selector Overload mitigation limits for items
 #####################################################################

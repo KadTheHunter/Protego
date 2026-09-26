@@ -31,7 +31,7 @@ public final class Protego extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VehicleCreateListener(entityManager), this);
 
         if (getCommand("evanesco") != null) {
-            Objects.requireNonNull(getCommand("evanesco")).setExecutor(new EvanescoCommand(this));
+            Objects.requireNonNull(getCommand("evanesco")).setExecutor(new EvanescoCommand(configManager, getLogger()));
         }
         if (getCommand("protego") != null) {
             Objects.requireNonNull(getCommand("protego")).setExecutor(new ProtegoCommand(configManager));

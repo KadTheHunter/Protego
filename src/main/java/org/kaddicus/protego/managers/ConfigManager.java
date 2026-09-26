@@ -17,10 +17,12 @@ public class ConfigManager {
     private final Set<EntityType> passengerBlacklist = new HashSet<>();
     private final Set<EntityType> passengerWhitelist = new HashSet<>();
     private final Set<EntityType> chunkLimitExclusions = new HashSet<>();
+    private final Set<EntityType> evanescoKeepList = new HashSet<>();
     private int globalChunkLimit = -1;
     private int itemMaxCharacters = 65_536;
     private int itemMaxDepth = 12;
     private int itemMaxNodes = 10_000;
+    private int evanescoMaxRadius = 5;
 
     public ConfigManager(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -76,6 +78,13 @@ public class ConfigManager {
             }
         }
 
+        evanescoMaxRadius = Math.clamp(config.getInt("evanesco-max-radius", 5), 1, 10);
+
+        for (String typeName : config.getStringList("evanesco-keep-list")) {
+            try { evanescoKeepList.add(EntityType.valueOf(typeName.toUpperCase())); }
+            catch (IllegalArgumentException e) { logger.warning("Unknown entity type in evanesco-keep-list: " + typeName); }
+        }
+
         itemMaxCharacters = config.getInt("item-max-characters", 65536);
         itemMaxDepth = config.getInt("item-max-depth", 12);
         itemMaxNodes = config.getInt("item-max-nodes", 10000);
@@ -98,10 +107,12 @@ public class ConfigManager {
         Set<EntityType> newPassengerBlacklist = new HashSet<>();
         Set<EntityType> newPassengerWhitelist = new HashSet<>();
         Set<EntityType> newChunkExclusions = new HashSet<>();
+        Set<EntityType> newEvanescoKeepList = new HashSet<>();
         int newGlobalLimit = -1;
         int newItemMaxCharacters = config.getInt("item-max-characters", 65536);
         int newItemMaxDepth = config.getInt("item-max-depth", 12);
         int newItemMaxNodes = config.getInt("item-max-nodes", 10000);
+        int newEvanescoMaxRadius = Math.clamp(config.getInt("evanesco-max-radius", 5), 1, 10);
 
         for (String typeName : config.getStringList("blocked-entity-types")) {
             try {
@@ -145,6 +156,10 @@ public class ConfigManager {
 
         newGlobalLimit = config.getInt("global-entity-per-chunk-limit", -1);
 
+        for (String typeName : config.getStringList("evanesco-keep-list")) {
+            try { newEvanescoKeepList.add(EntityType.valueOf(typeName.toUpperCase())); }
+            catch (IllegalArgumentException e) { logger.warning("Unknown entity type: " + typeName); }
+        }
 
         blockedEntityTypes.clear();
         blockedEntityTypes.addAll(newBlockedTypes);
@@ -161,6 +176,10 @@ public class ConfigManager {
         itemMaxCharacters = newItemMaxCharacters;
         itemMaxDepth = newItemMaxDepth;
         itemMaxNodes = newItemMaxNodes;
+
+        evanescoKeepList.clear();
+        evanescoKeepList.addAll(newEvanescoKeepList);
+        evanescoMaxRadius = newEvanescoMaxRadius;
 
         logger.info("Configuration reloaded successfully");
     }
@@ -200,4 +219,8 @@ public class ConfigManager {
     public int getItemMaxNodes() {
         return itemMaxNodes;
     }
+
+    public Set<EntityType> getEvanescoKeepList() { return evanescoKeepList; }
+
+    public int getEvanescoMaxRadius() { return evanescoMaxRadius; }
 }

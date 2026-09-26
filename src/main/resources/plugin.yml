@@ -7,7 +7,7 @@ description: Protects Item Frames, Paintings, and other Hanging Entities from be
 
 commands:
   evanesco:
-    description: Removes all Armor Stands with negative Health / DeathTime values
+    description: Removes all non-whitelisted entities, or all entities targeted by flags passed, up to the maximum radius
     usage: /evanesco
     permission: protego.evanesco
   protego:
